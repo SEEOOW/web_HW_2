@@ -12,10 +12,11 @@
                 <h2 class="card-title pricing-card-title">{{ object.product_description|slice:5 }} ... </h2>
                 <h1 class="card-title pricing-card-title">{{ object.product_purchase_price }} RUB</h1>
                 <a href="{% url 'catalog:products' object.pk %}" class="btn btn-lg btn-block btn-outline-primary">Подробнее
-                    о
-                    товаре</a>
+                    о товаре</a>
             </div>
         </div>
     </div>
-    {% endfor %}
-    {% endblock %}
+</div>
+{% endfor %}
+
+{% endblock %}
