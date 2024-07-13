@@ -5,38 +5,23 @@ from django.views.generic import ListView, DetailView, TemplateView
 from catalog.models import Product
 
 
-# Create your views here.
-# def home(request):
-#     return render(request, 'catalog/product_list.html')
-
-
-# def index(request):
-#     products_list = Product.objects.all()
-#     context = {
-#         'products_list': products_list,
-#         'title': 'Main page',
-#     }
-#     return render(request, 'catalog/product_list.html', context)
-
-
 class ProductListView(ListView):
-     model = Product
+    model = Product
+    template_name = 'product_list.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        products = context['object_list']  # Получаем список продуктов из контекста
+        # Для каждого продукта получаем данные об активной версии
+        for product in products:
+            active_version = product.version.filter(active_version=True).first()
+            # Добавляем информацию об активной версии в контекст для каждого продукта
+            product.active_version = active_version
+        return context
 
 
 class ProductDetailView(DetailView):
     model = Product
     success_url = reverse_lazy('main:index')
-
-# def products (request, pk):
-#     context = {
-#         'object': Product.objects.get(pk=pk),
-#         'title': 'Product page',
-#     }
-#     return render(request, 'catalog/product_detail.html', context)
-
-
-# def contacts(request):
-#     return render(request, 'catalog/contacts.html')
 
 
 class ContactsView(TemplateView):
