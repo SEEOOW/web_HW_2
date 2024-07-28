@@ -22,6 +22,9 @@ class Category(models.Model):
     class Meta:
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
+        permissions = [
+            ('can_edit_category_name', 'Can edit category name'),
+        ]
 
 
 class Product(models.Model):
@@ -52,6 +55,8 @@ class Product(models.Model):
     date_change = models.DateTimeField(
         auto_now=True, verbose_name="Дата последнего изменения"
     )
+    is_published = models.BooleanField(default=False, verbose_name='опубликовано')
+
 
     def __str__(self):
         return f"{self.product_name} {self.product_description}"
@@ -60,6 +65,10 @@ class Product(models.Model):
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
         ordering = ("product_name",)
+        permissions = [
+            ('can_edit_product_description', 'Can edit product description'),
+            ('can_edit_is_published', 'Can edit product publication'),
+        ]
 
 
 class Version(models.Model):
