@@ -57,7 +57,7 @@ class UserLoginView(LoginView):
     model = User
     form_class = UserLoginForm
     # redirect_authenticated_user = True
-    success_url = reverse_lazy('catalog:home')
+    success_url = reverse_lazy('catalog:index')
 
 class UserPasswordResetView(PasswordResetView):
     form_class = UserRecoveryForm

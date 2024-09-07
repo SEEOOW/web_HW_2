@@ -23,7 +23,7 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         user = self.request.user
         if user == self.object.owner:
             return ProductForm
-        if user.has_perm('main.can_edit_product_description') and user.has_perm('main.can_edit_is_published'):
+        if user.has_perm('catalog.can_edit_product_description') and user.has_perm('catalog.can_edit_is_published'):
             return ProductModeratorForm
         raise PermissionDenied
 
@@ -42,11 +42,11 @@ class ProductListView(ListView):
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
-    success_url = reverse_lazy('main:index')
+    success_url = reverse_lazy('catalog:index')
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
-    success_url = reverse_lazy('main:index')
+    success_url = reverse_lazy('catalog:index')
 
     def get_form_class(self):
         user = self.request.user
@@ -80,7 +80,7 @@ class VersionListView(ListView):
 class VersionCreateView(CreateView):
     model = Version
     form_class = VersionForm
-    success_url = reverse_lazy('main:index')
+    success_url = reverse_lazy('catalog:index')
 
     def form_valid(self, form):
         if form.is_valid():
