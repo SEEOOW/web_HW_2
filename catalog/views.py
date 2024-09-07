@@ -2,6 +2,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
+from django.core.cache import cache
+from config import settings
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 
 from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
@@ -33,11 +35,20 @@ class ProductListView(ListView):
     template_name = 'product_list.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        products = context['object_list']
-        for product in products:
-            active_version = product.version.filter(active_version=True).first()
-            product.active_version = active_version
-        return context
+        if settings.CACHE_ENABLED:
+            key = f'product_list'
+            products = cache.get(key)
+            if products is None:
+                products_list = context['object_list']
+                for product in products_list:
+                    active_version = product.version.filter(active_version=True).first()
+                    product.active_version = active_version
+
+                cache.set(key, products_list)
+            else:
+                context['products'] = products
+            return context
+
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
