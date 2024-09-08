@@ -57,7 +57,6 @@ class Product(models.Model):
     )
     is_published = models.BooleanField(default=False, verbose_name='опубликовано')
 
-
     def __str__(self):
         return f"{self.product_name} {self.product_description}"
 

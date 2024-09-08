@@ -33,6 +33,7 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
 class ProductListView(ListView):
     model = Product
     template_name = 'product_list.html'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if settings.CACHE_ENABLED:
@@ -50,10 +51,10 @@ class ProductListView(ListView):
             return context
 
 
-
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     success_url = reverse_lazy('catalog:index')
+
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
@@ -81,6 +82,7 @@ class ContactsView(TemplateView):
         context['title'] = 'Contacts'
         return context
 
+
 class VersionListView(ListView):
     model = Version
 
@@ -100,13 +102,16 @@ class VersionCreateView(CreateView):
             form.instance.product = product
         return super().form_valid(form)
 
+
 class VersionUpdateView(UpdateView):
     model = Version
     form_class = VersionForm
     success_url = reverse_lazy('catalog:index')
 
+
 class VersionDetailView(DetailView):
     model = Version
+
 
 class VersionDeleteView(DeleteView):
     model = Version
