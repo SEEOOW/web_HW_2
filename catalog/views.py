@@ -3,11 +3,13 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.core.cache import cache
+
+from catalog.services import get_category_from_cache
 from config import settings
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 
 from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
-from catalog.models import Product, Version
+from catalog.models import Product, Version, Category
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
@@ -116,3 +118,10 @@ class VersionDetailView(DetailView):
 class VersionDeleteView(DeleteView):
     model = Version
     success_url = reverse_lazy('catalog:index')
+
+
+class CategoryListView(ListView):
+    model = Category
+
+    def get_queryset(self):
+        return get_category_from_cache()
